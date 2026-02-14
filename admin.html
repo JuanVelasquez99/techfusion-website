@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Administración - TechFusion</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        body { background: var(--light-gray); }
+        .admin-container { max-width: 1400px; margin: 0 auto; padding: 100px 20px 40px; }
+        .admin-header { background: white; padding: 2rem; border-radius: 12px; margin-bottom: 2rem; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .admin-header h1 { color: var(--dark-blue); margin-bottom: 0.5rem; }
+        .admin-grid { display: grid; grid-template-columns: 1fr 2fr; gap: 2rem; }
+        .admin-form, .product-list { background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .admin-form h2, .product-list h2 { color: var(--dark-blue); margin-bottom: 1.5rem; }
+        .form-group { margin-bottom: 1.5rem; }
+        .form-group label { display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--dark-blue); }
+        .form-group input, .form-group textarea { width: 100%; padding: 0.75rem; border: 1px solid var(--light-gray); border-radius: 6px; font-family: inherit; }
+        .form-group textarea { min-height: 100px; }
+        .image-upload { border: 2px dashed var(--light-gray); padding: 2rem; text-align: center; border-radius: 6px; cursor: pointer; transition: all 0.3s; }
+        .image-upload:hover { border-color: var(--primary-blue); background: var(--light-gray); }
+        .image-preview { max-width: 200px; margin-top: 1rem; border-radius: 6px; }
+        .btn-save { width: 100%; padding: 1rem; background: var(--gradient); color: white; border: none; border-radius: 6px; font-weight: 700; cursor: pointer; }
+        .btn-save:hover { opacity: 0.9; }
+        .product-item { display: flex; gap: 1rem; padding: 1rem; border: 1px solid var(--light-gray); border-radius: 6px; margin-bottom: 1rem; }
+        .product-item img { width: 80px; height: 80px; object-fit: cover; border-radius: 6px; }
+        .product-info { flex: 1; }
+        .product-info h3 { color: var(--dark-blue); margin-bottom: 0.25rem; }
+        .product-info p { font-size: 0.9rem; color: var(--dark-gray); }
+        .product-actions { display: flex; gap: 0.5rem; align-items: center; }
+        .btn-edit, .btn-delete { padding: 0.5rem 1rem; border: none; border-radius: 4px; cursor: pointer; font-weight: 600; }
+        .btn-edit { background: var(--primary-blue); color: white; }
+        .btn-delete { background: #e74c3c; color: white; }
+        .login-form { max-width: 400px; margin: 100px auto; padding: 2rem; background: white; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); }
+        .login-form h2 { text-align: center; color: var(--dark-blue); margin-bottom: 2rem; }
+        .btn-login { width: 100%; padding: 1rem; background: var(--gradient); color: white; border: none; border-radius: 6px; font-weight: 700; cursor: pointer; margin-top: 1rem; }
+        .logout-btn { background: #e74c3c; color: white; padding: 0.5rem 1.5rem; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; }
+        @media (max-width: 968px) { .admin-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <div id="loginScreen" style="display:none;">
+        <div class="login-form">
+            <h2>🔐 Acceso Administrativo</h2>
+            <div class="form-group">
+                <label>Contraseña</label>
+                <input type="password" id="adminPassword" placeholder="Ingrese contraseña">
+            </div>
+            <button class="btn-login" onclick="login()">Ingresar</button>
+            <p style="text-align: center; margin-top: 1rem; color: var(--dark-gray); font-size: 0.9rem;">
+                Contraseña predeterminada: <strong>techfusion2026</strong>
+            </p>
+        </div>
+    </div>
+
+    <div id="adminPanel" style="display:none;">
+        <nav class="navbar">
+            <div class="nav-container">
+                <div class="nav-logo"><span class="logo-icon">TF</span><span class="logo-text">TechFusion Admin</span></div>
+                <button class="logout-btn" onclick="logout()">Cerrar Sesión</button>
+            </div>
+        </nav>
+
+        <div class="admin-container">
+            <div class="admin-header">
+                <h1>Panel de Administración de Productos</h1>
+                <p>Gestiona el catálogo de productos de TechFusion</p>
+            </div>
+
+            <div class="admin-grid">
+                <div class="admin-form">
+                    <h2 id="formTitle">Agregar Producto</h2>
+                    <form id="productForm" onsubmit="return saveProduct(event)">
+                        <input type="hidden" id="editId">
+                        <div class="form-group">
+                            <label>Nombre del Producto *</label>
+                            <input type="text" id="productName" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Marca *</label>
+                            <input type="text" id="productBrand" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Precio (COP) *</label>
+                            <input type="number" id="productPrice" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Almacenamiento *</label>
+                            <input type="text" id="productStorage" placeholder="Ej: 512GB SSD" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Memoria RAM *</label>
+                            <input type="text" id="productRam" placeholder="Ej: 16GB" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Descripción</label>
+                            <textarea id="productDescription"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Imagen del Producto</label>
+                            <div class="image-upload" onclick="document.getElementById('imageInput').click()">
+                                <p>📷 Click para subir imagen</p>
+                                <p style="font-size: 0.9rem; color: var(--dark-gray);">O arrastra y suelta aquí</p>
+                            </div>
+                            <input type="file" id="imageInput" accept="image/*" style="display:none" onchange="previewImage(event)">
+                            <img id="imagePreview" class="image-preview" style="display:none">
+                        </div>
+                        <button type="submit" class="btn-save">Guardar Producto</button>
+                        <button type="button" class="btn-save" style="background: var(--dark-gray); margin-top: 0.5rem;" onclick="cancelEdit()">Cancelar</button>
+                    </form>
+                </div>
+
+                <div class="product-list">
+                    <h2>Productos Actuales (<span id="productTotal">0</span>)</h2>
+                    <div id="productListContainer"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const ADMIN_PASSWORD = 'techfusion2026';
+        
+        function checkAuth() {
+            const auth = sessionStorage.getItem('tf_admin_auth');
+            if (auth === 'true') {
+                showAdmin();
+            } else {
+                showLogin();
+            }
+        }
+        
+        function showLogin() {
+            document.getElementById('loginScreen').style.display = 'block';
+            document.getElementById('adminPanel').style.display = 'none';
+        }
+        
+        function showAdmin() {
+            document.getElementById('loginScreen').style.display = 'none';
+            document.getElementById('adminPanel').style.display = 'block';
+            loadProductList();
+        }
+        
+        function login() {
+            const pass = document.getElementById('adminPassword').value;
+            if (pass === ADMIN_PASSWORD) {
+                sessionStorage.setItem('tf_admin_auth', 'true');
+                showAdmin();
+            } else {
+                alert('Contraseña incorrecta');
+            }
+        }
+        
+        function logout() {
+            sessionStorage.removeItem('tf_admin_auth');
+            showLogin();
+        }
+        
+        let currentImageData = null;
+        
+        function previewImage(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    currentImageData = e.target.result;
+                    const preview = document.getElementById('imagePreview');
+                    preview.src = currentImageData;
+                    preview.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+        
+        function saveProduct(event) {
+            event.preventDefault();
+            const products = JSON.parse(localStorage.getItem('techfusion_products') || '[]');
+            const editId = document.getElementById('editId').value;
+            
+            const product = {
+                id: editId ? parseInt(editId) : Date.now(),
+                name: document.getElementById('productName').value,
+                brand: document.getElementById('productBrand').value,
+                price: parseInt(document.getElementById('productPrice').value),
+                storage: document.getElementById('productStorage').value,
+                ram: document.getElementById('productRam').value,
+                description: document.getElementById('productDescription').value,
+                image: currentImageData || `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='200'%3E%3Crect fill='%231C9CD4' width='300' height='200'/%3E%3Ctext x='50%25' y='50%25' font-size='20' fill='white' text-anchor='middle' dy='.3em'%3E${document.getElementById('productName').value}%3C/text%3E%3C/svg%3E`
+            };
+            
+            if (editId) {
+                const index = products.findIndex(p => p.id === parseInt(editId));
+                products[index] = product;
+            } else {
+                products.push(product);
+            }
+            
+            localStorage.setItem('techfusion_products', JSON.stringify(products));
+            alert('Producto guardado exitosamente');
+            resetForm();
+            loadProductList();
+            return false;
+        }
+        
+        function loadProductList() {
+            const products = JSON.parse(localStorage.getItem('techfusion_products') || '[]');
+            const container = document.getElementById('productListContainer');
+            document.getElementById('productTotal').textContent = products.length;
+            
+            if (products.length === 0) {
+                container.innerHTML = '<p style="text-align:center; color: var(--dark-gray);">No hay productos. Agrega el primero.</p>';
+                return;
+            }
+            
+            container.innerHTML = products.map(p => `
+                <div class="product-item">
+                    <img src="${p.image}" alt="${p.name}">
+                    <div class="product-info">
+                        <h3>${p.name}</h3>
+                        <p>${p.brand} | ${p.ram} | ${p.storage} | $${p.price.toLocaleString('es-CO')}</p>
+                    </div>
+                    <div class="product-actions">
+                        <button class="btn-edit" onclick="editProduct(${p.id})">✏️ Editar</button>
+                        <button class="btn-delete" onclick="deleteProduct(${p.id})">🗑️ Eliminar</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        function editProduct(id) {
+            const products = JSON.parse(localStorage.getItem('techfusion_products') || '[]');
+            const product = products.find(p => p.id === id);
+            
+            document.getElementById('formTitle').textContent = 'Editar Producto';
+            document.getElementById('editId').value = product.id;
+            document.getElementById('productName').value = product.name;
+            document.getElementById('productBrand').value = product.brand;
+            document.getElementById('productPrice').value = product.price;
+            document.getElementById('productStorage').value = product.storage;
+            document.getElementById('productRam').value = product.ram;
+            document.getElementById('productDescription').value = product.description || '';
+            
+            if (product.image) {
+                currentImageData = product.image;
+                document.getElementById('imagePreview').src = product.image;
+                document.getElementById('imagePreview').style.display = 'block';
+            }
+            
+            window.scrollTo(0, 0);
+        }
+        
+        function deleteProduct(id) {
+            if (!confirm('¿Seguro que deseas eliminar este producto?')) return;
+            const products = JSON.parse(localStorage.getItem('techfusion_products') || '[]');
+            const filtered = products.filter(p => p.id !== id);
+            localStorage.setItem('techfusion_products', JSON.stringify(filtered));
+            loadProductList();
+        }
+        
+        function cancelEdit() {
+            resetForm();
+        }
+        
+        function resetForm() {
+            document.getElementById('formTitle').textContent = 'Agregar Producto';
+            document.getElementById('productForm').reset();
+            document.getElementById('editId').value = '';
+            document.getElementById('imagePreview').style.display = 'none';
+            currentImageData = null;
+        }
+        
+        checkAuth();
+    </script>
+</body>
+</html>
