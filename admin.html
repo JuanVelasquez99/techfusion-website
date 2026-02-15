@@ -64,10 +64,43 @@
 
         <div class="admin-container">
             <div class="admin-header">
-                <h1>Panel de Administración de Productos</h1>
-                <p>Gestiona el catálogo de productos de TechFusion</p>
-            </div>
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+        <div>
+            <h1>Panel de Administración de Productos</h1>
+            <p>Gestiona el catálogo de productos de TechFusion</p>
+        </div>
+        <button onclick="showPasswordModal()" style="padding: 0.75rem 1.5rem; background: var(--dark-blue); color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 600;">
+            🔒 Cambiar Contraseña
+        </button>
+    </div>
+</div>
 
+<!-- Modal Cambiar Contraseña -->
+<div id="passwordModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.7); z-index: 9999; justify-content: center; align-items: center;">
+    <div style="background: white; padding: 2rem; border-radius: 12px; max-width: 500px; width: 90%;">
+        <h2 style="color: var(--dark-blue); margin-bottom: 1.5rem;">Cambiar Contraseña</h2>
+        <div class="form-group">
+            <label>Contraseña Actual</label>
+            <input type="password" id="currentPassword" style="width: 100%; padding: 0.75rem; border: 1px solid var(--light-gray); border-radius: 6px;">
+        </div>
+        <div class="form-group">
+            <label>Nueva Contraseña</label>
+            <input type="password" id="newPassword" style="width: 100%; padding: 0.75rem; border: 1px solid var(--light-gray); border-radius: 6px;">
+        </div>
+        <div class="form-group">
+            <label>Confirmar Nueva Contraseña</label>
+            <input type="password" id="confirmPassword" style="width: 100%; padding: 0.75rem; border: 1px solid var(--light-gray); border-radius: 6px;">
+        </div>
+        <div style="display: flex; gap: 1rem; margin-top: 1.5rem;">
+            <button onclick="changePassword()" style="flex: 1; padding: 0.75rem; background: var(--gradient); color: white; border: none; border-radius: 6px; font-weight: 600; cursor: pointer;">
+                Guardar Nueva Contraseña
+            </button>
+            <button onclick="closePasswordModal()" style="flex: 1; padding: 0.75rem; background: var(--dark-gray); color: white; border: none; border-radius: 6px; font-weight: 600; cursor: pointer;">
+                Cancelar
+            </button>
+        </div>
+    </div>
+</div>
             <div class="admin-grid">
                 <div class="admin-form">
                     <h2 id="formTitle">Agregar Producto</h2>
@@ -120,157 +153,206 @@
     </div>
 
     <script>
-        const ADMIN_PASSWORD = 'techfusion2026';
-        
-        function checkAuth() {
-            const auth = sessionStorage.getItem('tf_admin_auth');
-            if (auth === 'true') {
-                showAdmin();
-            } else {
-                showLogin();
-            }
-        }
-        
-        function showLogin() {
-            document.getElementById('loginScreen').style.display = 'block';
-            document.getElementById('adminPanel').style.display = 'none';
-        }
-        
-        function showAdmin() {
-            document.getElementById('loginScreen').style.display = 'none';
-            document.getElementById('adminPanel').style.display = 'block';
-            loadProductList();
-        }
-        
-        function login() {
-            const pass = document.getElementById('adminPassword').value;
-            if (pass === ADMIN_PASSWORD) {
-                sessionStorage.setItem('tf_admin_auth', 'true');
-                showAdmin();
-            } else {
-                alert('Contraseña incorrecta');
-            }
-        }
-        
-        function logout() {
-            sessionStorage.removeItem('tf_admin_auth');
+    // Sistema de contraseña con localStorage
+    function getAdminPassword() {
+        return localStorage.getItem('tf_admin_password') || 'techfusion2026';
+    }
+    
+    function setAdminPassword(newPassword) {
+        localStorage.setItem('tf_admin_password', newPassword);
+    }
+    
+    function checkAuth() {
+        const auth = sessionStorage.getItem('tf_admin_auth');
+        if (auth === 'true') {
+            showAdmin();
+        } else {
             showLogin();
         }
+    }
+    
+    function showLogin() {
+        document.getElementById('loginScreen').style.display = 'block';
+        document.getElementById('adminPanel').style.display = 'none';
+    }
+    
+    function showAdmin() {
+        document.getElementById('loginScreen').style.display = 'none';
+        document.getElementById('adminPanel').style.display = 'block';
+        loadProductList();
+    }
+    
+    function login() {
+        const pass = document.getElementById('adminPassword').value;
+        if (pass === getAdminPassword()) {
+            sessionStorage.setItem('tf_admin_auth', 'true');
+            showAdmin();
+        } else {
+            alert('Contraseña incorrecta');
+        }
+    }
+    
+    function logout() {
+        sessionStorage.removeItem('tf_admin_auth');
+        showLogin();
+    }
+    
+    // Sistema de cambio de contraseña
+    function showPasswordModal() {
+        document.getElementById('passwordModal').style.display = 'flex';
+    }
+    
+    function closePasswordModal() {
+        document.getElementById('passwordModal').style.display = 'none';
+        document.getElementById('currentPassword').value = '';
+        document.getElementById('newPassword').value = '';
+        document.getElementById('confirmPassword').value = '';
+    }
+    
+    function changePassword() {
+        const current = document.getElementById('currentPassword').value;
+        const newPass = document.getElementById('newPassword').value;
+        const confirm = document.getElementById('confirmPassword').value;
         
-        let currentImageData = null;
-        
-        function previewImage(event) {
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    currentImageData = e.target.result;
-                    const preview = document.getElementById('imagePreview');
-                    preview.src = currentImageData;
-                    preview.style.display = 'block';
-                };
-                reader.readAsDataURL(file);
-            }
+        if (!current || !newPass || !confirm) {
+            alert('Por favor completa todos los campos');
+            return;
         }
         
-        function saveProduct(event) {
-            event.preventDefault();
-            const products = JSON.parse(localStorage.getItem('techfusion_products') || '[]');
-            const editId = document.getElementById('editId').value;
-            
-            const product = {
-                id: editId ? parseInt(editId) : Date.now(),
-                name: document.getElementById('productName').value,
-                brand: document.getElementById('productBrand').value,
-                price: parseInt(document.getElementById('productPrice').value),
-                storage: document.getElementById('productStorage').value,
-                ram: document.getElementById('productRam').value,
-                description: document.getElementById('productDescription').value,
-                image: currentImageData || `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='200'%3E%3Crect fill='%231C9CD4' width='300' height='200'/%3E%3Ctext x='50%25' y='50%25' font-size='20' fill='white' text-anchor='middle' dy='.3em'%3E${document.getElementById('productName').value}%3C/text%3E%3C/svg%3E`
+        if (current !== getAdminPassword()) {
+            alert('La contraseña actual es incorrecta');
+            return;
+        }
+        
+        if (newPass.length < 8) {
+            alert('La nueva contraseña debe tener al menos 8 caracteres');
+            return;
+        }
+        
+        if (newPass !== confirm) {
+            alert('Las contraseñas no coinciden');
+            return;
+        }
+        
+        setAdminPassword(newPass);
+        alert('✅ Contraseña cambiada exitosamente');
+        closePasswordModal();
+    }
+    
+    let currentImageData = null;
+    
+    function previewImage(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                currentImageData = e.target.result;
+                const preview = document.getElementById('imagePreview');
+                preview.src = currentImageData;
+                preview.style.display = 'block';
             };
-            
-            if (editId) {
-                const index = products.findIndex(p => p.id === parseInt(editId));
-                products[index] = product;
-            } else {
-                products.push(product);
-            }
-            
-            localStorage.setItem('techfusion_products', JSON.stringify(products));
-            alert('Producto guardado exitosamente');
-            resetForm();
-            loadProductList();
-            return false;
+            reader.readAsDataURL(file);
+        }
+    }
+    
+    function saveProduct(event) {
+        event.preventDefault();
+        const products = JSON.parse(localStorage.getItem('techfusion_products') || '[]');
+        const editId = document.getElementById('editId').value;
+        
+        const product = {
+            id: editId ? parseInt(editId) : Date.now(),
+            name: document.getElementById('productName').value,
+            brand: document.getElementById('productBrand').value,
+            price: parseInt(document.getElementById('productPrice').value),
+            storage: document.getElementById('productStorage').value,
+            ram: document.getElementById('productRam').value,
+            description: document.getElementById('productDescription').value,
+            image: currentImageData || `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='200'%3E%3Crect fill='%231C9CD4' width='300' height='200'/%3E%3Ctext x='50%25' y='50%25' font-size='20' fill='white' text-anchor='middle' dy='.3em'%3E${document.getElementById('productName').value}%3C/text%3E%3C/svg%3E`
+        };
+        
+        if (editId) {
+            const index = products.findIndex(p => p.id === parseInt(editId));
+            products[index] = product;
+        } else {
+            products.push(product);
         }
         
-        function loadProductList() {
-            const products = JSON.parse(localStorage.getItem('techfusion_products') || '[]');
-            const container = document.getElementById('productListContainer');
-            document.getElementById('productTotal').textContent = products.length;
-            
-            if (products.length === 0) {
-                container.innerHTML = '<p style="text-align:center; color: var(--dark-gray);">No hay productos. Agrega el primero.</p>';
-                return;
-            }
-            
-            container.innerHTML = products.map(p => `
-                <div class="product-item">
-                    <img src="${p.image}" alt="${p.name}">
-                    <div class="product-info">
-                        <h3>${p.name}</h3>
-                        <p>${p.brand} | ${p.ram} | ${p.storage} | $${p.price.toLocaleString('es-CO')}</p>
-                    </div>
-                    <div class="product-actions">
-                        <button class="btn-edit" onclick="editProduct(${p.id})">✏️ Editar</button>
-                        <button class="btn-delete" onclick="deleteProduct(${p.id})">🗑️ Eliminar</button>
-                    </div>
+        localStorage.setItem('techfusion_products', JSON.stringify(products));
+        alert('Producto guardado exitosamente');
+        resetForm();
+        loadProductList();
+        return false;
+    }
+    
+    function loadProductList() {
+        const products = JSON.parse(localStorage.getItem('techfusion_products') || '[]');
+        const container = document.getElementById('productListContainer');
+        document.getElementById('productTotal').textContent = products.length;
+        
+        if (products.length === 0) {
+            container.innerHTML = '<p style="text-align:center; color: var(--dark-gray);">No hay productos. Agrega el primero.</p>';
+            return;
+        }
+        
+        container.innerHTML = products.map(p => `
+            <div class="product-item">
+                <img src="${p.image}" alt="${p.name}">
+                <div class="product-info">
+                    <h3>${p.name}</h3>
+                    <p>${p.brand} | ${p.ram} | ${p.storage} | $${p.price.toLocaleString('es-CO')}</p>
                 </div>
-            `).join('');
+                <div class="product-actions">
+                    <button class="btn-edit" onclick="editProduct(${p.id})">✏️ Editar</button>
+                    <button class="btn-delete" onclick="deleteProduct(${p.id})">🗑️ Eliminar</button>
+                </div>
+            </div>
+        `).join('');
+    }
+    
+    function editProduct(id) {
+        const products = JSON.parse(localStorage.getItem('techfusion_products') || '[]');
+        const product = products.find(p => p.id === id);
+        
+        document.getElementById('formTitle').textContent = 'Editar Producto';
+        document.getElementById('editId').value = product.id;
+        document.getElementById('productName').value = product.name;
+        document.getElementById('productBrand').value = product.brand;
+        document.getElementById('productPrice').value = product.price;
+        document.getElementById('productStorage').value = product.storage;
+        document.getElementById('productRam').value = product.ram;
+        document.getElementById('productDescription').value = product.description || '';
+        
+        if (product.image) {
+            currentImageData = product.image;
+            document.getElementById('imagePreview').src = product.image;
+            document.getElementById('imagePreview').style.display = 'block';
         }
         
-        function editProduct(id) {
-            const products = JSON.parse(localStorage.getItem('techfusion_products') || '[]');
-            const product = products.find(p => p.id === id);
-            
-            document.getElementById('formTitle').textContent = 'Editar Producto';
-            document.getElementById('editId').value = product.id;
-            document.getElementById('productName').value = product.name;
-            document.getElementById('productBrand').value = product.brand;
-            document.getElementById('productPrice').value = product.price;
-            document.getElementById('productStorage').value = product.storage;
-            document.getElementById('productRam').value = product.ram;
-            document.getElementById('productDescription').value = product.description || '';
-            
-            if (product.image) {
-                currentImageData = product.image;
-                document.getElementById('imagePreview').src = product.image;
-                document.getElementById('imagePreview').style.display = 'block';
-            }
-            
-            window.scrollTo(0, 0);
-        }
-        
-        function deleteProduct(id) {
-            if (!confirm('¿Seguro que deseas eliminar este producto?')) return;
-            const products = JSON.parse(localStorage.getItem('techfusion_products') || '[]');
-            const filtered = products.filter(p => p.id !== id);
-            localStorage.setItem('techfusion_products', JSON.stringify(filtered));
-            loadProductList();
-        }
-        
-        function cancelEdit() {
-            resetForm();
-        }
-        
-        function resetForm() {
-            document.getElementById('formTitle').textContent = 'Agregar Producto';
-            document.getElementById('productForm').reset();
-            document.getElementById('editId').value = '';
-            document.getElementById('imagePreview').style.display = 'none';
-            currentImageData = null;
-        }
-        
-        checkAuth();
-    </script>
+        window.scrollTo(0, 0);
+    }
+    
+    function deleteProduct(id) {
+        if (!confirm('¿Seguro que deseas eliminar este producto?')) return;
+        const products = JSON.parse(localStorage.getItem('techfusion_products') || '[]');
+        const filtered = products.filter(p => p.id !== id);
+        localStorage.setItem('techfusion_products', JSON.stringify(filtered));
+        loadProductList();
+    }
+    
+    function cancelEdit() {
+        resetForm();
+    }
+    
+    function resetForm() {
+        document.getElementById('formTitle').textContent = 'Agregar Producto';
+        document.getElementById('productForm').reset();
+        document.getElementById('editId').value = '';
+        document.getElementById('imagePreview').style.display = 'none';
+        currentImageData = null;
+    }
+    
+    checkAuth();
+</script>
 </body>
 </html>
