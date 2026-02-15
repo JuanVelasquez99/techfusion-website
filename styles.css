@@ -530,7 +530,24 @@ body {
     border-top: 1px solid rgba(255, 255, 255, 0.1);
     color: var(--light-blue);
 }
+/* Login Button in Nav */
+.btn-login-nav {
+    background: var(--gradient) !important;
+    color: white !important;
+    padding: 0.6rem 1.5rem !important;
+    border-radius: 6px !important;
+    font-weight: 600 !important;
+    transition: all 0.3s ease !important;
+}
 
+.btn-login-nav:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 4px 15px rgba(28, 156, 212, 0.4) !important;
+}
+
+.btn-login-nav::after {
+    display: none !important;
+}
 /* Responsive Design */
 @media (max-width: 768px) {
     .nav-toggle {
