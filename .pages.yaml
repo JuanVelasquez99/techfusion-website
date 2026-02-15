@@ -1,3 +1,2 @@
-build:
-  command: echo "No build needed"
-  output: /
+# Configuración para Cloudflare Pages - Sitio Estático
+# No requiere compilación
