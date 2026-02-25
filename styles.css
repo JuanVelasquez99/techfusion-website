@@ -630,9 +630,16 @@ body {
     transform: scale(1.05);
 }
    /* Brands Section */
+
+/* Brands Section */
 .brands-section {
     padding: 100px 20px;
     background: white;
+}
+
+.brands-container-wrapper {
+    position: relative;
+    margin-top: 3rem;
 }
 
 .brands-grid {
@@ -640,28 +647,14 @@ body {
     gap: 2rem;
     overflow-x: auto;
     overflow-y: hidden;
-    margin-top: 3rem;
     padding: 1rem 0;
     scroll-behavior: smooth;
     -webkit-overflow-scrolling: touch;
+    scrollbar-width: none; /* Firefox */
 }
 
 .brands-grid::-webkit-scrollbar {
-    height: 8px;
-}
-
-.brands-grid::-webkit-scrollbar-track {
-    background: var(--light-gray);
-    border-radius: 10px;
-}
-
-.brands-grid::-webkit-scrollbar-thumb {
-    background: var(--primary-blue);
-    border-radius: 10px;
-}
-
-.brands-grid::-webkit-scrollbar-thumb:hover {
-    background: var(--dark-blue);
+    display: none; /* Chrome, Safari, Edge */
 }
 
 .brand-card {
@@ -702,10 +695,56 @@ body {
     white-space: nowrap;
 }
 
+/* Scroll Buttons */
+.brand-scroll-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 50px;
+    height: 50px;
+    background: var(--primary-blue);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 10;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(28, 156, 212, 0.3);
+}
+
+.brand-scroll-btn:hover {
+    background: var(--dark-blue);
+    transform: translateY(-50%) scale(1.1);
+    box-shadow: 0 6px 25px rgba(28, 156, 212, 0.5);
+}
+
+.brand-scroll-left {
+    left: -25px;
+}
+
+.brand-scroll-right {
+    right: -25px;
+}
+
 @media (max-width: 768px) {
     .brand-card {
         min-width: 150px;
         padding: 1.5rem 2rem;
     }
-}
+    
+    .brand-scroll-btn {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .brand-scroll-left {
+        left: -10px;
+    }
+    
+    .brand-scroll-right {
+        right: -10px;
+    }
 }
