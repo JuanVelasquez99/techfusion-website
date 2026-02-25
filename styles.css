@@ -629,31 +629,56 @@ body {
 .btn-add-cart:hover {
     transform: scale(1.05);
 }
-    /* Brands Section */
+   /* Brands Section */
 .brands-section {
     padding: 100px 20px;
     background: white;
 }
 
 .brands-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    display: flex;
     gap: 2rem;
+    overflow-x: auto;
+    overflow-y: hidden;
     margin-top: 3rem;
+    padding: 1rem 0;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+}
+
+.brands-grid::-webkit-scrollbar {
+    height: 8px;
+}
+
+.brands-grid::-webkit-scrollbar-track {
+    background: var(--light-gray);
+    border-radius: 10px;
+}
+
+.brands-grid::-webkit-scrollbar-thumb {
+    background: var(--primary-blue);
+    border-radius: 10px;
+}
+
+.brands-grid::-webkit-scrollbar-thumb:hover {
+    background: var(--dark-blue);
 }
 
 .brand-card {
     background: white;
     border: 2px solid var(--light-gray);
     border-radius: 12px;
-    padding: 2rem 1.5rem;
+    padding: 2rem 2.5rem;
     text-align: center;
     transition: all 0.3s ease;
     text-decoration: none;
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
     gap: 1rem;
+    min-width: 180px;
+    flex-shrink: 0;
 }
 
 .brand-card:hover {
@@ -674,12 +699,13 @@ body {
     font-weight: 700;
     font-size: 1.1rem;
     margin: 0;
+    white-space: nowrap;
 }
 
 @media (max-width: 768px) {
-    .brands-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 1.5rem;
+    .brand-card {
+        min-width: 150px;
+        padding: 1.5rem 2rem;
     }
 }
 }
