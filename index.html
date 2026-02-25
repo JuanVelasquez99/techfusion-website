@@ -145,6 +145,7 @@
 
 <!-- Brands Section -->
 
+
 <section class="brands-section">
     <div class="container">
         <div class="section-header">
@@ -154,69 +155,133 @@
                 Trabajamos con las mejores marcas del mercado para ofrecerte productos de calidad garantizada
             </p>
         </div>
-        <div class="brands-grid" style="display: flex !important; flex-direction: row !important; gap: 2rem; overflow-x: auto; padding: 1rem 0;">
-            <a href="productos.html?marca=HP" class="brand-card" style="min-width: 180px; flex-shrink: 0;">
-                <div class="brand-logo">
-                    <svg viewBox="0 0 100 100" width="80" height="80">
-                        <rect width="100" height="100" fill="#0096D6" rx="10"/>
-                        <text x="50" y="60" font-size="35" font-weight="900" fill="white" text-anchor="middle" font-family="Arial">HP</text>
-                    </svg>
-                </div>
-                <h3>HP</h3>
-            </a>
+        
+        <div class="brands-container-wrapper">
+            <button class="brand-scroll-btn brand-scroll-left" id="scrollLeft">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="15 18 9 12 15 6"></polyline>
+                </svg>
+            </button>
+            
+            <div class="brands-grid" id="brandsGrid">
+                <a href="productos.html?marca=HP" class="brand-card">
+                    <div class="brand-logo">
+                        <svg viewBox="0 0 100 100" width="80" height="80">
+                            <rect width="100" height="100" fill="#0096D6" rx="10"/>
+                            <text x="50" y="60" font-size="35" font-weight="900" fill="white" text-anchor="middle" font-family="Arial">HP</text>
+                        </svg>
+                    </div>
+                    <h3>HP</h3>
+                </a>
 
-            <a href="productos.html?marca=ASUS" class="brand-card" style="min-width: 180px; flex-shrink: 0;">
-                <div class="brand-logo">
-                    <svg viewBox="0 0 100 100" width="80" height="80">
-                        <rect width="100" height="100" fill="#000000" rx="10"/>
-                        <text x="50" y="60" font-size="28" font-weight="900" fill="white" text-anchor="middle" font-family="Arial">ASUS</text>
-                    </svg>
-                </div>
-                <h3>ASUS</h3>
-            </a>
+                <a href="productos.html?marca=ASUS" class="brand-card">
+                    <div class="brand-logo">
+                        <svg viewBox="0 0 100 100" width="80" height="80">
+                            <rect width="100" height="100" fill="#000000" rx="10"/>
+                            <text x="50" y="60" font-size="28" font-weight="900" fill="white" text-anchor="middle" font-family="Arial">ASUS</text>
+                        </svg>
+                    </div>
+                    <h3>ASUS</h3>
+                </a>
 
-            <a href="productos.html?marca=LENOVO" class="brand-card" style="min-width: 180px; flex-shrink: 0;">
-                <div class="brand-logo">
-                    <svg viewBox="0 0 100 100" width="80" height="80">
-                        <rect width="100" height="100" fill="#E2231A" rx="10"/>
-                        <text x="50" y="55" font-size="20" font-weight="900" fill="white" text-anchor="middle" font-family="Arial">LENOVO</text>
-                    </svg>
-                </div>
-                <h3>LENOVO</h3>
-            </a>
+                <a href="productos.html?marca=LENOVO" class="brand-card">
+                    <div class="brand-logo">
+                        <svg viewBox="0 0 100 100" width="80" height="80">
+                            <rect width="100" height="100" fill="#E2231A" rx="10"/>
+                            <text x="50" y="55" font-size="20" font-weight="900" fill="white" text-anchor="middle" font-family="Arial">LENOVO</text>
+                        </svg>
+                    </div>
+                    <h3>LENOVO</h3>
+                </a>
 
-            <a href="productos.html?marca=SAMSUNG" class="brand-card" style="min-width: 180px; flex-shrink: 0;">
-                <div class="brand-logo">
-                    <svg viewBox="0 0 100 100" width="80" height="80">
-                        <rect width="100" height="100" fill="#1428A0" rx="10"/>
-                        <text x="50" y="52" font-size="18" font-weight="900" fill="white" text-anchor="middle" font-family="Arial">SAMSUNG</text>
-                    </svg>
-                </div>
-                <h3>SAMSUNG</h3>
-            </a>
+                <a href="productos.html?marca=SAMSUNG" class="brand-card">
+                    <div class="brand-logo">
+                        <svg viewBox="0 0 100 100" width="80" height="80">
+                            <rect width="100" height="100" fill="#1428A0" rx="10"/>
+                            <text x="50" y="52" font-size="18" font-weight="900" fill="white" text-anchor="middle" font-family="Arial">SAMSUNG</text>
+                        </svg>
+                    </div>
+                    <h3>SAMSUNG</h3>
+                </a>
 
-            <a href="productos.html?marca=XIAOMI" class="brand-card" style="min-width: 180px; flex-shrink: 0;">
-                <div class="brand-logo">
-                    <svg viewBox="0 0 100 100" width="80" height="80">
-                        <rect width="100" height="100" fill="#FF6900" rx="10"/>
-                        <text x="50" y="55" font-size="22" font-weight="900" fill="white" text-anchor="middle" font-family="Arial">XIAOMI</text>
-                    </svg>
-                </div>
-                <h3>XIAOMI</h3>
-            </a>
+                <a href="productos.html?marca=XIAOMI" class="brand-card">
+                    <div class="brand-logo">
+                        <svg viewBox="0 0 100 100" width="80" height="80">
+                            <rect width="100" height="100" fill="#FF6900" rx="10"/>
+                            <text x="50" y="55" font-size="22" font-weight="900" fill="white" text-anchor="middle" font-family="Arial">XIAOMI</text>
+                        </svg>
+                    </div>
+                    <h3>XIAOMI</h3>
+                </a>
 
-            <a href="productos.html?marca=EPSON" class="brand-card" style="min-width: 180px; flex-shrink: 0;">
-                <div class="brand-logo">
-                    <svg viewBox="0 0 100 100" width="80" height="80">
-                        <rect width="100" height="100" fill="#003DA5" rx="10"/>
-                        <text x="50" y="58" font-size="24" font-weight="900" fill="white" text-anchor="middle" font-family="Arial">EPSON</text>
-                    </svg>
-                </div>
-                <h3>EPSON</h3>
-            </a>
+                <a href="productos.html?marca=EPSON" class="brand-card">
+                    <div class="brand-logo">
+                        <svg viewBox="0 0 100 100" width="80" height="80">
+                            <rect width="100" height="100" fill="#003DA5" rx="10"/>
+                            <text x="50" y="58" font-size="24" font-weight="900" fill="white" text-anchor="middle" font-family="Arial">EPSON</text>
+                        </svg>
+                    </div>
+                    <h3>EPSON</h3>
+                </a>
+            </div>
+
+            <button class="brand-scroll-btn brand-scroll-right" id="scrollRight">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="9 18 15 12 9 6"></polyline>
+                </svg>
+            </button>
         </div>
     </div>
 </section>
+
+<script>
+// Brand Scroll Auto-movement on Hover
+(function() {
+    const brandsGrid = document.getElementById('brandsGrid');
+    const scrollLeft = document.getElementById('scrollLeft');
+    const scrollRight = document.getElementById('scrollRight');
+    
+    let scrollInterval = null;
+    const scrollSpeed = 3; // Velocidad de scroll (píxeles por frame)
+    
+    function startScrollLeft() {
+        if (scrollInterval) return;
+        scrollInterval = setInterval(() => {
+            brandsGrid.scrollLeft -= scrollSpeed;
+        }, 16); // 60fps
+    }
+    
+    function startScrollRight() {
+        if (scrollInterval) return;
+        scrollInterval = setInterval(() => {
+            brandsGrid.scrollLeft += scrollSpeed;
+        }, 16); // 60fps
+    }
+    
+    function stopScroll() {
+        if (scrollInterval) {
+            clearInterval(scrollInterval);
+            scrollInterval = null;
+        }
+    }
+    
+    // Event listeners para hover automático
+    scrollLeft.addEventListener('mouseenter', startScrollLeft);
+    scrollLeft.addEventListener('mouseleave', stopScroll);
+    
+    scrollRight.addEventListener('mouseenter', startScrollRight);
+    scrollRight.addEventListener('mouseleave', stopScroll);
+    
+    // También funciona con click (opcional)
+    scrollLeft.addEventListener('click', () => {
+        brandsGrid.scrollBy({ left: -250, behavior: 'smooth' });
+    });
+    
+    scrollRight.addEventListener('click', () => {
+        brandsGrid.scrollBy({ left: 250, behavior: 'smooth' });
+    });
+})();
+</script>
     
     <!-- CTA Section -->
     <section class="cta">
