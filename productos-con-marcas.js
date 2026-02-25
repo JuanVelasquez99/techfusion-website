@@ -1,4 +1,4 @@
-// Product Management System with Shopping Cart
+// Product Management System with Brand Filtering
 class ProductManager {
     constructor() {
         this.products = this.loadProducts();
@@ -11,14 +11,38 @@ class ProductManager {
             ram: []
         };
         this.sortBy = 'name';
+        this.brandMode = false; // Indica si venimos desde una marca
+        this.selectedBrand = null;
         this.init();
     }
 
     init() {
+        // Check if we came from a brand link
+        const urlParams = new URLSearchParams(window.location.search);
+        const brand = urlParams.get('marca');
+        
+        if (brand) {
+            this.brandMode = true;
+            this.selectedBrand = brand;
+            this.filters.brands = [brand];
+            this.updatePageTitle(brand);
+        }
+
         this.renderFilterOptions();
         this.renderProducts();
         this.attachEventListeners();
         this.updateCartBadge();
+    }
+
+    updatePageTitle(brand) {
+        const pageTitle = document.querySelector('.page-header-content h1');
+        const pageDesc = document.querySelector('.page-header-content p');
+        if (pageTitle) {
+            pageTitle.textContent = `Productos ${brand}`;
+        }
+        if (pageDesc) {
+            pageDesc.textContent = `Explora nuestra selección de productos ${brand}`;
+        }
     }
 
     loadProducts() {
@@ -46,26 +70,6 @@ class ProductManager {
                 ram: "32GB",
                 image: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='200'%3E%3Crect fill='%2300C8DC' width='300' height='200'/%3E%3Ctext x='50%25' y='50%25' font-size='24' fill='white' text-anchor='middle' dy='.3em'%3EHP Gaming%3C/text%3E%3C/svg%3E",
                 description: "Laptop gaming de alto rendimiento"
-            },
-            {
-                id: 3,
-                name: "Lenovo ThinkPad X1",
-                brand: "Lenovo",
-                price: 4500000,
-                storage: "512GB SSD",
-                ram: "16GB",
-                image: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='200'%3E%3Crect fill='%231E2761' width='300' height='200'/%3E%3Ctext x='50%25' y='50%25' font-size='24' fill='white' text-anchor='middle' dy='.3em'%3EThinkPad%3C/text%3E%3C/svg%3E",
-                description: "Laptop profesional para negocios"
-            },
-            {
-                id: 4,
-                name: "Asus ROG Strix",
-                brand: "Asus",
-                price: 5800000,
-                storage: "1TB SSD",
-                ram: "32GB",
-                image: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='200'%3E%3Crect fill='%23363636' width='300' height='200'/%3E%3Ctext x='50%25' y='50%25' font-size='24' fill='white' text-anchor='middle' dy='.3em'%3EROG Strix%3C/text%3E%3C/svg%3E",
-                description: "Gaming extremo con RTX 4070"
             }
         ];
     }
@@ -110,6 +114,15 @@ class ProductManager {
 
         this.saveCart();
         this.showNotification('Producto agregado al carrito');
+    }
+
+    requestQuote(productId) {
+        const product = this.products.find(p => p.id === productId);
+        if (!product) return;
+
+        const message = `Hola, me interesa cotizar:\n\n*${product.name}*\n${product.brand}\nEspecificaciones: ${product.ram} RAM | ${product.storage}`;
+        const whatsappUrl = `https://wa.me/573116152792?text=${encodeURIComponent(message)}`;
+        window.open(whatsappUrl, '_blank');
     }
 
     showNotification(message) {
@@ -168,7 +181,7 @@ class ProductManager {
         if (brandFilters) {
             brandFilters.innerHTML = brands.map(brand => `
                 <div class="filter-option">
-                    <input type="checkbox" id="brand-${brand}" value="${brand}" data-filter="brand">
+                    <input type="checkbox" id="brand-${brand}" value="${brand}" data-filter="brand" ${this.filters.brands.includes(brand) ? 'checked' : ''}>
                     <label for="brand-${brand}">${brand}</label>
                 </div>
             `).join('');
@@ -215,28 +228,43 @@ class ProductManager {
         grid.style.display = 'grid';
         noProducts.style.display = 'none';
 
-        grid.innerHTML = sorted.map(product => `
-            <div class="product-card">
-                <img src="${product.image}" alt="${product.name}" class="product-image">
-                <div class="product-info">
-                    <div class="product-brand">${product.brand}</div>
-                    <div class="product-name">${product.name}</div>
-                    <div class="product-specs">${product.ram} RAM | ${product.storage}</div>
-                    <div class="product-price">$${product.price.toLocaleString('es-CO')}</div>
-                    <div class="product-actions">
-                        <button class="btn-add-cart" onclick="productManager.addToCart(${product.id})">
-                            🛒 Agregar al Carrito
-                        </button>
+        // Si estamos en modo marca, mostrar SIN PRECIOS
+        if (this.brandMode) {
+            grid.innerHTML = sorted.map(product => `
+                <div class="product-card">
+                    <img src="${product.image}" alt="${product.name}" class="product-image">
+                    <div class="product-info">
+                        <div class="product-brand">${product.brand}</div>
+                        <div class="product-name">${product.name}</div>
+                        <div class="product-specs">${product.ram} RAM | ${product.storage}</div>
+                        <p class="product-description">${product.description || ''}</p>
+                        <div class="product-actions">
+                            <button class="btn-add-cart" onclick="productManager.requestQuote(${product.id})">
+                                💬 Solicitar Cotización
+                            </button>
+                        </div>
                     </div>
                 </div>
-            </div>
-        `).join('');
-    }
-
-    requestQuote(productName) {
-        const message = `Hola, me interesa cotizar: ${productName}`;
-        const whatsappUrl = `https://wa.me/573116152792?text=${encodeURIComponent(message)}`;
-        window.open(whatsappUrl, '_blank');
+            `).join('');
+        } else {
+            // Modo normal CON PRECIOS
+            grid.innerHTML = sorted.map(product => `
+                <div class="product-card">
+                    <img src="${product.image}" alt="${product.name}" class="product-image">
+                    <div class="product-info">
+                        <div class="product-brand">${product.brand}</div>
+                        <div class="product-name">${product.name}</div>
+                        <div class="product-specs">${product.ram} RAM | ${product.storage}</div>
+                        <div class="product-price">$${product.price.toLocaleString('es-CO')}</div>
+                        <div class="product-actions">
+                            <button class="btn-add-cart" onclick="productManager.addToCart(${product.id})">
+                                🛒 Agregar al Carrito
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
     }
 
     attachEventListeners() {
@@ -279,13 +307,19 @@ class ProductManager {
                 this.filters = {
                     minPrice: null,
                     maxPrice: null,
-                    brands: [],
+                    brands: this.brandMode ? [this.selectedBrand] : [],
                     storage: [],
                     ram: []
                 };
                 document.getElementById('minPrice').value = '';
                 document.getElementById('maxPrice').value = '';
-                document.querySelectorAll('[data-filter]').forEach(cb => cb.checked = false);
+                document.querySelectorAll('[data-filter]').forEach(cb => {
+                    if (this.brandMode && cb.value === this.selectedBrand) {
+                        cb.checked = true;
+                    } else {
+                        cb.checked = false;
+                    }
+                });
                 this.renderProducts();
             });
         }
@@ -308,6 +342,12 @@ style.textContent = `
     @keyframes slideOut {
         from { transform: translateX(0); opacity: 1; }
         to { transform: translateX(400px); opacity: 0; }
+    }
+    .product-description {
+        font-size: 0.9rem;
+        color: var(--dark-gray);
+        margin: 0.75rem 0;
+        line-height: 1.6;
     }
 `;
 document.head.appendChild(style);
