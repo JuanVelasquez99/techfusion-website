@@ -144,8 +144,6 @@
     </section>
 
 <!-- Brands Section -->
-
-
 <section class="brands-section">
     <div class="container">
         <div class="section-header">
@@ -156,76 +154,81 @@
             </p>
         </div>
         
-        <div class="brands-container-wrapper">
-            <button class="brand-scroll-btn brand-scroll-left" id="scrollLeft">
+        <div class="brands-container-wrapper" style="position: relative; margin-top: 3rem;">
+            <button class="brand-scroll-btn brand-scroll-left" id="scrollLeft" style="position: absolute; top: 50%; transform: translateY(-50%); left: -25px; width: 50px; height: 50px; background: var(--primary-blue); color: white; border: none; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 10; box-shadow: 0 4px 15px rgba(28, 156, 212, 0.3);">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
                     <polyline points="15 18 9 12 15 6"></polyline>
                 </svg>
             </button>
             
-            <div class="brands-grid" id="brandsGrid">
-                <a href="productos.html?marca=HP" class="brand-card">
+            <div class="brands-grid" id="brandsGrid" style="display: flex !important; gap: 2rem; overflow-x: auto; overflow-y: hidden; padding: 1rem 0; scroll-behavior: smooth; scrollbar-width: none; -ms-overflow-style: none;">
+                <style>
+                    #brandsGrid::-webkit-scrollbar { display: none; }
+                    .brand-card:hover { transform: translateY(-10px); border-color: var(--primary-blue); box-shadow: 0 10px 30px rgba(28, 156, 212, 0.2); }
+                    .brand-scroll-btn:hover { background: var(--dark-blue) !important; transform: translateY(-50%) scale(1.1) !important; }
+                </style>
+                <a href="productos.html?marca=HP" class="brand-card" style="min-width: 180px; flex-shrink: 0; background: white; border: 2px solid var(--light-gray); border-radius: 12px; padding: 2rem 2.5rem; text-align: center; text-decoration: none; display: flex; flex-direction: column; align-items: center; gap: 1rem;">
                     <div class="brand-logo">
                         <svg viewBox="0 0 100 100" width="80" height="80">
                             <rect width="100" height="100" fill="#0096D6" rx="10"/>
                             <text x="50" y="60" font-size="35" font-weight="900" fill="white" text-anchor="middle" font-family="Arial">HP</text>
                         </svg>
                     </div>
-                    <h3>HP</h3>
+                    <h3 style="color: var(--dark-blue); font-weight: 700; margin: 0;">HP</h3>
                 </a>
 
-                <a href="productos.html?marca=ASUS" class="brand-card">
+                <a href="productos.html?marca=ASUS" class="brand-card" style="min-width: 180px; flex-shrink: 0; background: white; border: 2px solid var(--light-gray); border-radius: 12px; padding: 2rem 2.5rem; text-align: center; text-decoration: none; display: flex; flex-direction: column; align-items: center; gap: 1rem;">
                     <div class="brand-logo">
                         <svg viewBox="0 0 100 100" width="80" height="80">
                             <rect width="100" height="100" fill="#000000" rx="10"/>
                             <text x="50" y="60" font-size="28" font-weight="900" fill="white" text-anchor="middle" font-family="Arial">ASUS</text>
                         </svg>
                     </div>
-                    <h3>ASUS</h3>
+                    <h3 style="color: var(--dark-blue); font-weight: 700; margin: 0;">ASUS</h3>
                 </a>
 
-                <a href="productos.html?marca=LENOVO" class="brand-card">
+                <a href="productos.html?marca=LENOVO" class="brand-card" style="min-width: 180px; flex-shrink: 0; background: white; border: 2px solid var(--light-gray); border-radius: 12px; padding: 2rem 2.5rem; text-align: center; text-decoration: none; display: flex; flex-direction: column; align-items: center; gap: 1rem;">
                     <div class="brand-logo">
                         <svg viewBox="0 0 100 100" width="80" height="80">
                             <rect width="100" height="100" fill="#E2231A" rx="10"/>
                             <text x="50" y="55" font-size="20" font-weight="900" fill="white" text-anchor="middle" font-family="Arial">LENOVO</text>
                         </svg>
                     </div>
-                    <h3>LENOVO</h3>
+                    <h3 style="color: var(--dark-blue); font-weight: 700; margin: 0;">LENOVO</h3>
                 </a>
 
-                <a href="productos.html?marca=SAMSUNG" class="brand-card">
+                <a href="productos.html?marca=SAMSUNG" class="brand-card" style="min-width: 180px; flex-shrink: 0; background: white; border: 2px solid var(--light-gray); border-radius: 12px; padding: 2rem 2.5rem; text-align: center; text-decoration: none; display: flex; flex-direction: column; align-items: center; gap: 1rem;">
                     <div class="brand-logo">
                         <svg viewBox="0 0 100 100" width="80" height="80">
                             <rect width="100" height="100" fill="#1428A0" rx="10"/>
                             <text x="50" y="52" font-size="18" font-weight="900" fill="white" text-anchor="middle" font-family="Arial">SAMSUNG</text>
                         </svg>
                     </div>
-                    <h3>SAMSUNG</h3>
+                    <h3 style="color: var(--dark-blue); font-weight: 700; margin: 0;">SAMSUNG</h3>
                 </a>
 
-                <a href="productos.html?marca=XIAOMI" class="brand-card">
+                <a href="productos.html?marca=XIAOMI" class="brand-card" style="min-width: 180px; flex-shrink: 0; background: white; border: 2px solid var(--light-gray); border-radius: 12px; padding: 2rem 2.5rem; text-align: center; text-decoration: none; display: flex; flex-direction: column; align-items: center; gap: 1rem;">
                     <div class="brand-logo">
                         <svg viewBox="0 0 100 100" width="80" height="80">
                             <rect width="100" height="100" fill="#FF6900" rx="10"/>
                             <text x="50" y="55" font-size="22" font-weight="900" fill="white" text-anchor="middle" font-family="Arial">XIAOMI</text>
                         </svg>
                     </div>
-                    <h3>XIAOMI</h3>
+                    <h3 style="color: var(--dark-blue); font-weight: 700; margin: 0;">XIAOMI</h3>
                 </a>
 
-                <a href="productos.html?marca=EPSON" class="brand-card">
+                <a href="productos.html?marca=EPSON" class="brand-card" style="min-width: 180px; flex-shrink: 0; background: white; border: 2px solid var(--light-gray); border-radius: 12px; padding: 2rem 2.5rem; text-align: center; text-decoration: none; display: flex; flex-direction: column; align-items: center; gap: 1rem;">
                     <div class="brand-logo">
                         <svg viewBox="0 0 100 100" width="80" height="80">
                             <rect width="100" height="100" fill="#003DA5" rx="10"/>
                             <text x="50" y="58" font-size="24" font-weight="900" fill="white" text-anchor="middle" font-family="Arial">EPSON</text>
                         </svg>
                     </div>
-                    <h3>EPSON</h3>
+                    <h3 style="color: var(--dark-blue); font-weight: 700; margin: 0;">EPSON</h3>
                 </a>
             </div>
 
-            <button class="brand-scroll-btn brand-scroll-right" id="scrollRight">
+            <button class="brand-scroll-btn brand-scroll-right" id="scrollRight" style="position: absolute; top: 50%; transform: translateY(-50%); right: -25px; width: 50px; height: 50px; background: var(--primary-blue); color: white; border: none; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 10; box-shadow: 0 4px 15px rgba(28, 156, 212, 0.3);">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
                     <polyline points="9 18 15 12 9 6"></polyline>
                 </svg>
